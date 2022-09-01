@@ -4,7 +4,7 @@ const ctx = canvas.getContext("2d");
 const CANVAS_WIDTH = (canvas.width = 500);
 const CANVAS_HEIGHT = (canvas.height = 1000);
 
-const TOTOAL_ENEMIES = 10;
+const TOTOAL_ENEMIES = 50;
 const SPRITE_SHEET_WIDTH = 1758;
 const SPRITE_SHEET_HEIGHT = 155;
 const TOTAL_SCENES = 6;
@@ -19,21 +19,18 @@ class Enemey {
     this.image = new Image();
     this.image.src = src;
     this.flapSpeed = Math.floor(Math.random() * 4 + 2);
-    this.totalSprites = 6;
+    this.totalSprites = 9;
     this.currentSprite = 0;
     this.sprite = (this.image.width / this.totalSprites) * this.currentSprite;
     this.width = (this.image.width / this.totalSprites) * aspectRatio;
     this.height = this.image.height * aspectRatio;
     this.sourceWidth = this.image.width / this.totalSprites;
     this.sourceHeight = this.image.height;
-    // this.x = generateRandom(0, canvas.width - this.width/2);
-    this.x = canvas.width/2;
-    this.y = generateRandom(0, canvas.height - this.height / 2);
-    this.angle = generateRandom(10, 50);
-    this.curve = generateRandom(0, 8);
-    this.angleSpeed = generateRandom(0.1, 0.01);
-    this.xAngle = 0.05;
-    this.yAngle = 360;
+    this.x = generateRandom(0, canvas.width - this.width/2);
+    this.y = generateRandom(0, canvas.height - this.height/2);
+    this.newX = generateRandom(0, canvas.width - this.width/2);
+    this.newY = generateRandom(0, canvas.height - this.height/2);
+    this.moveTime = Math.floor(generateRandom(50, 100));
   }
 
   findSprite() {
@@ -59,12 +56,14 @@ class Enemey {
           ? 0
           : (this.currentSprite += 1);
     }
-    if (this.x + this.width < 0) {
-      this.x = canvas.width;
+    if (gameFrame % this.moveTime === 0) {
+      this.newX = generateRandom(0, canvas.width - this.width/2);
+      this.newY = generateRandom(0, canvas.height - this.height/2);
     }
-    this.x =  canvas.width/2+ Math.cos(this.xAngle) * (canvas.width/2 -this.width/2);
-    this.y = this.y;
-    this.xAngle += this.angleSpeed;
+    let dx = this.x - this.newX;
+    let dy = this.y - this.newY;
+    this.x -= dx / 69;
+    this.y -= dy / 50;
     this.findSprite();
     this.draw();
   }
@@ -75,7 +74,7 @@ ctx.stroke();
 let scene = 0;
 let enemies = [];
 for (let i = 0; i < TOTOAL_ENEMIES; i++) {
-  enemies.push(new Enemey("./images/enemy3.png", 1, 1 / 2));
+  enemies.push(new Enemey("./images/enemy4.png", 1, 1 / 2));
 }
 
 const animate = () => {
