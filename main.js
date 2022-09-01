@@ -10,7 +10,6 @@ image.src = "./images/enemy1.png";
 const SPRITE_SHEET_WIDTH = 1758;
 const SPRITE_SHEET_HEIGHT = 155;
 const TOTAL_SCENES = 6;
-const GAME_SPEED = 2;
 let gameFrame = 0;
 
 
@@ -23,7 +22,7 @@ class Enemey {
   constructor(src, speed, aspectRatio = 1) {
     this.image = new Image();
     this.image.src = src;
-    this.speed = speed;
+    this.flapSpeed = Math.floor(Math.random() * 4 + 2);
     this.totalSprites = 6;
     this.currentSprite = 0;
     this.sprite = (image.width / this.totalSprites) * this.currentSprite;
@@ -52,10 +51,8 @@ class Enemey {
       );
     }
   update() {
-    if (gameFrame % GAME_SPEED === 0) {
-      if (this.currentSprite + 1 > this.totalSprites - 1)
-        this.currentSprite = 0;
-      else this.currentSprite++;
+    if (gameFrame % this.flapSpeed === 0) {
+      this.currentSprite = (this.currentSprite + 1) > (this.totalSprites - 1) ? 0 : this.currentSprite += 1;
     }
     this.x += Math.random() * 5 - 2.5;
     this.y += Math.random() * 5 - 2.5;
