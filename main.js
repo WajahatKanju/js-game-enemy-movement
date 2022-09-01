@@ -4,7 +4,7 @@ const ctx = canvas.getContext("2d");
 const CANVAS_WIDTH = (canvas.width = 500);
 const CANVAS_HEIGHT = (canvas.height = 1000);
 
-
+const TOTOAL_ENEMIES = 75;
 const SPRITE_SHEET_WIDTH = 1758;
 const SPRITE_SHEET_HEIGHT = 155;
 const TOTAL_SCENES = 6;
@@ -30,6 +30,9 @@ class Enemey {
     this.sourceHeight = this.image.height;
     this.x = generateRandom(0, canvas.width );
     this.y = generateRandom(0, canvas.height - (this.height/2));
+    this.angle = 0.05;
+    this.curve = generateRandom(0, 8);
+    this.angleSpeed = generateRandom(0.01, 0.1);
   }
 
   findSprite() {
@@ -58,7 +61,8 @@ class Enemey {
 
     }
     this.x -= this.flapSpeed;
-    this.y += Math.random() * 5 - 2.5;
+    this.y += this.curve * Math.sin(this.angle);
+    this.angle += this.angleSpeed;
     this.findSprite();
     this.draw();
   }
@@ -68,7 +72,7 @@ ctx.stroke();
 
 let scene = 0;
 let enemies = [];
-for (let i = 0; i < 250; i++) {
+for (let i = 0; i < TOTOAL_ENEMIES; i++) {
   
   enemies.push(new Enemey("./images/enemy2.png", 1, 1/2));
 }
