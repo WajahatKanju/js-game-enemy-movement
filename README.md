@@ -1,1 +1,1 @@
-# canvas-boilerplate
+# NPC MOVEMENT ANIMATIONS
