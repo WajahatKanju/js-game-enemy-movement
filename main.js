@@ -4,17 +4,15 @@ const ctx = canvas.getContext("2d");
 const CANVAS_WIDTH = (canvas.width = 500);
 const CANVAS_HEIGHT = (canvas.height = 1000);
 
-const TOTOAL_ENEMIES = 75;
+const TOTOAL_ENEMIES = 10;
 const SPRITE_SHEET_WIDTH = 1758;
 const SPRITE_SHEET_HEIGHT = 155;
 const TOTAL_SCENES = 6;
 let gameFrame = 0;
 
-
 const generateRandom = (min, max) => {
   return Math.random() * (max - min) + min;
-}
-
+};
 
 class Enemey {
   constructor(src, speed, aspectRatio = 1) {
@@ -28,11 +26,14 @@ class Enemey {
     this.height = this.image.height * aspectRatio;
     this.sourceWidth = this.image.width / this.totalSprites;
     this.sourceHeight = this.image.height;
-    this.x = generateRandom(0, canvas.width );
-    this.y = generateRandom(0, canvas.height - (this.height/2));
-    this.angle = 0.05;
+    // this.x = generateRandom(0, canvas.width - this.width/2);
+    this.x = canvas.width/2;
+    this.y = generateRandom(0, canvas.height - this.height / 2);
+    this.angle = generateRandom(10, 50);
     this.curve = generateRandom(0, 8);
-    this.angleSpeed = generateRandom(0.01, 0.1);
+    this.angleSpeed = generateRandom(0.1, 0.01);
+    this.xAngle = 0.05;
+    this.yAngle = 360;
   }
 
   findSprite() {
@@ -49,20 +50,21 @@ class Enemey {
       this.y,
       this.width / 2,
       this.height / 2
-      );
-    }
+    );
+  }
   update() {
     if (gameFrame % this.flapSpeed === 0) {
-      this.currentSprite = (this.currentSprite + 1) > (this.totalSprites - 1) ? 0 : this.currentSprite += 1;
+      this.currentSprite =
+        this.currentSprite + 1 > this.totalSprites - 1
+          ? 0
+          : (this.currentSprite += 1);
     }
-    if(this.x + this.width < 0 ){
-      
+    if (this.x + this.width < 0) {
       this.x = canvas.width;
-
     }
-    this.x -= this.flapSpeed;
-    this.y += this.curve * Math.sin(this.angle);
-    this.angle += this.angleSpeed;
+    this.x =  canvas.width/2+ Math.cos(this.xAngle) * (canvas.width/2 -this.width/2);
+    this.y = this.y;
+    this.xAngle += this.angleSpeed;
     this.findSprite();
     this.draw();
   }
@@ -73,14 +75,13 @@ ctx.stroke();
 let scene = 0;
 let enemies = [];
 for (let i = 0; i < TOTOAL_ENEMIES; i++) {
-  
-  enemies.push(new Enemey("./images/enemy2.png", 1, 1/2));
+  enemies.push(new Enemey("./images/enemy3.png", 1, 1 / 2));
 }
 
 const animate = () => {
   requestAnimationFrame(animate);
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-  enemies.forEach(enemy => enemy.update());
+  enemies.forEach((enemy) => enemy.update());
   gameFrame++;
 };
 
